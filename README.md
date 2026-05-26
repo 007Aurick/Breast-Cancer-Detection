@@ -1,6 +1,6 @@
 # 🧠 Cancer Cell Detection using YOLO + Grad-CAM
 
-This project uses **:contentReference[oaicite:0]{index=0}** to detect cancer cells in microscopy images and applies **:contentReference[oaicite:1]{index=1}** for model interpretability.
+This project uses a method to detect cancer cells in microscopy images and applies it for model interpretability.
 
 The system outputs bounding boxes around detected cancer cells and heatmaps showing what the model focused on.
 
