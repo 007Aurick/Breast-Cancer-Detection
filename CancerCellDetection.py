@@ -9,8 +9,6 @@ import cv2
 import numpy as np
 import pandas as pd
 
-
-
 cap = cv2.VideoCapture(0)
 yolo_model = YOLO("yolo11m.pt")
 
@@ -24,6 +22,13 @@ while True:
     cv2.imshow("YOLO", annotated_frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+    
+
+    class CancerCNN(nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.conv1 = nn.Conv2d(3, 16, kernel_size=3, padding=1)
+            self.relu1 = nn.ReLU()
 
 #model = models.resnet18(weights="DEFAULT")
 
