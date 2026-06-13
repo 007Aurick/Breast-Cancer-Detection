@@ -12,6 +12,15 @@ import pandas as pd
 cap = cv2.VideoCapture(0)
 yolo_model = YOLO("yolo11m.pt")
 
+class CancerCNN(nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.conv1 = nn.Conv2d(3, 16, kernel_size=3, padding=1)
+            self.relu1 = nn.ReLU()
+
+cnn_model = CancerCNN()
+cnn_model.eval()
+
 while True:
     img, frame = cap.read()
     if img == False::
@@ -24,14 +33,6 @@ while True:
         break
     
 
-    class CancerCNN(nn.Module):
-        def __init__(self):
-            super().__init__()
-            self.conv1 = nn.Conv2d(3, 16, kernel_size=3, padding=1)
-            self.relu1 = nn.ReLU()
-
-#model = models.resnet18(weights="DEFAULT")
-
-#model.eval()
+    
 
 
