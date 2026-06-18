@@ -1,6 +1,8 @@
 from ultralytics import YOLO
 from gradcam import GradCAM
 import cv2
+import torch
+from torch import nn
 
 
 
@@ -16,7 +18,11 @@ cv2.destroyAllWindows()
 class CancerCNN(nn.Module):
    def __init__(self):
       super().__init__()
-      
+      self.conv1 = nn.Conv2d(3, 16, kernel_size=3, padding=1)
+      self.relu1 =nn.ReLU()
+      self.maxpool1 = nn.MaxPool2d(2)
+
+
  
 
 
