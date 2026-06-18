@@ -1,0 +1,7 @@
+yolo11m.pt
+train/
+valid/
+test/
+__pycache__/
+*.pyc
+runs/
