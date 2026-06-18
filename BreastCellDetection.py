@@ -74,7 +74,7 @@ for i, (box,cls) in enumerate(zip(boxes, classes)):#iterate through the bounding
    else:
       probability_text = f"Malignant: {(probablities[0, 1].item() * 100):.2f}%"#displays the probability of the class
    cv2.putText(side_by_side, probability_text, (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)#displays the probability text on the side by side image
-   cv2.imshow(f"Detection {i+1}", side_by_side)#displays the side by side image
+   cv2.imshow(f"Heatmap {i+1}", side_by_side)#displays the side by side image
 
 cv2.imshow("YOLO", annotated_frame)
 cv2.waitKey(0)
