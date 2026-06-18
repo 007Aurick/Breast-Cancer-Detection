@@ -1,18 +1,31 @@
 # Breast Cancer Cell Detection using YOLO + Grad-CAM
 
-This project uses a method to detect cancer cells in microscopy images and applies it for model interpretability.
-
-The system outputs bounding boxes around detected cancer cells and heatmaps showing which regions influenced the model's decision.
+A computer vision pipeline that detects breast cancer regions in medical images and explains model decisions using Grad-CAM heatmaps.
 
 ---
 
-## Features
+## How It Works
 
-- Breast cancer cell detection using YOLO
-- Bounding box localization with confidence scores
-- Custom CNN classifier for image-level predictions
-- Grad-CAM explainability overlays
-- Real-time webcam inference pipeline
+1. **YOLO** detects suspicious regions in the image and draws bounding boxes
+2. **CNN** classifies each detected region as benign or malignant
+3. **Grad-CAM** generates a heatmap showing which pixels influenced the CNN's decision
+4. Results are displayed side by side — original crop + heatmap overlay
+
+---
+
+## Project Structure
+
+```txt
+BreastCancerDetection/
+├── BreastCellDetection.py   # Main pipeline — YOLO + CNN + Grad-CAM
+├── train.py                 # Fine-tunes YOLO on breast cancer dataset
+├── crop_dataset.py          # Crops YOLO detections and saves by class
+├── cnn_train.py             # Trains custom CNN on cropped regions
+├── data.yaml                # YOLO dataset config
+├── best.pt                  # Trained YOLO weights
+├── cancer_cnn.pth           # Trained CNN weights
+└── README.md
+```
 
 ---
 
@@ -22,67 +35,14 @@ The system outputs bounding boxes around detected cancer cells and heatmaps show
 - PyTorch
 - Ultralytics YOLO
 - OpenCV
-- NumPy
-- Pandas
-- Matplotlib
 - pytorch-grad-cam
+- Pillow
 
 ---
 
-## Project Structure
+## Dataset
 
-```txt
-BreastCancerDetection/
-├── CancerCellDetection.py   # YOLO webcam inference + CNN / Grad-CAM setup
-├── ImagePathways.csv        # Image paths and labels (0 = benign, 1 = malignant)
-└── README.md
-```
-
----
-
-## Dataset Format (YOLO)
-
-Each image has a corresponding `.txt` label file in YOLO format.
-
-### Folder layout
-
-```txt
-dataset/
-├── images/
-│   ├── train/
-│   └── val/
-└── labels/
-    ├── train/
-    └── val/
-```
-
-### Label format
-
-Each `.txt` file contains one line per object:
-
-```txt
-<class_id> <x_center> <y_center> <width> <height>
-```
-
-All coordinates are normalized to `[0, 1]` relative to image width and height.
-
-| Class ID | Label    |
-|----------|----------|
-| 0        | Benign   |
-| 1        | Malignant |
-
-### CSV format (classification)
-
-For CNN training, images can also be referenced in `ImagePathways.csv`:
-
-```csv
-image_path,label
-images/img001.png,0
-images/img002.png,1
-```
-
-- `0` → Non-cancerous (benign)
-- `1` → Cancerous (malignant)
+Downloaded from [Roboflow Universe](https://universe.roboflow.com/breast-cancer-detection-roclf/breast-cancer-detection-jixc0/dataset/2) — 5,406 annotated breast cancer images in YOLOv11 format with two classes: benign and tumor.
 
 ---
 
@@ -91,74 +51,59 @@ images/img002.png,1
 ```bash
 git clone https://github.com/AurickAnwar/Cancer-Cell-Detection.git
 cd Cancer-Cell-Detection
-
-pip install torch torchvision ultralytics opencv-python numpy pandas matplotlib pytorch-grad-cam
+pip install torch torchvision ultralytics opencv-python pytorch-grad-cam Pillow grad-cam
 ```
-
-On first run, YOLO will download the `yolo11m.pt` weights automatically.
 
 ---
 
 ## Usage
 
-Run the main script to start real-time detection from your webcam:
-
+**Step 1 — Train YOLO** (one time only):
 ```bash
-python CancerCellDetection.py
+python train.py
 ```
 
-- A window shows YOLO detections with bounding boxes.
-- Press `q` to quit.
+**Step 2 — Crop detections for CNN training** (one time only):
+```bash
+python crop_dataset.py
+```
 
-Grad-CAM and CNN classification are wired up in the script for image-level explainability on static images.
+**Step 3 — Train CNN** (one time only):
+```bash
+python cnn_train.py
+```
+
+**Step 4 — Run the full pipeline:**
+```bash
+python BreastCellDetection.py
+```
 
 ---
 
-## Pipeline
+## Output
 
-```txt
-Image / Webcam Frame
-        ↓
-   YOLO Detection
-        ↓
-Bounding Boxes + Confidence
-        ↓
-   CNN Classification (optional)
-        ↓
-   Grad-CAM Heatmap
-        ↓
-Overlay on Original Image
-```
+- YOLO bounding boxes around detected regions
+- CNN classification (Benign / Malignant) with confidence score
+- Grad-CAM heatmap showing which regions influenced the prediction
+- Side by side display of original crop and heatmap
 
 ---
 
 ## Grad-CAM
 
-Grad-CAM highlights the regions in an image that contributed most to the model's prediction.
+- 🔴 Red / yellow → high importance regions
+- 🔵 Blue → low importance regions
 
-- **Red / yellow** → high-importance areas
-- **Blue** → low-importance areas
-
-This helps explain model decisions in medical imaging, where interpretability matters.
-
----
-
-## Goals
-
-- Detect breast cancer cells in microscopy images
-- Localize suspicious regions with YOLO
-- Explain predictions with Grad-CAM heatmaps
-- Build a foundation for medical AI and computer vision
+Grad-CAM makes the model explainable — critical in medical AI where trust and interpretability matter.
 
 ---
 
 ## Future Improvements
 
-- Train YOLO on a breast cancer histopathology dataset
-- Connect Grad-CAM to the CNN classifier for static image inference
+- Improve CNN accuracy with deeper architectures (ResNet, EfficientNet)
+- Add multi-class grading (tumor stage G1, G2, G3)
 - Add batch inference for folders of images
-- Expand to multi-class grading (e.g. tumor stage)
-- Improve accuracy with deeper architectures (EfficientNet, ResNet)
+- Build a simple UI for clinical demo purposes
 
 ---
 
