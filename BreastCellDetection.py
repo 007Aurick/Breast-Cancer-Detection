@@ -27,13 +27,17 @@ class CancerCNN(nn.Module):
       self.fc1 = nn.Linear(4096, 256)#64 of 8*8 pixels and 256 output layers
       self.fc2 = nn.Linear(256, 2)#2 output layers, Benign and Malignant
 
-      def forward(self, x):
+   def forward(self, x):
+      x = self.pool(self.relu(self.conv1(x))) #Takes image, runs through conv1, applies ReLU to remove negatives, shrink it in half with pool making image half the size
+      x = self.pool(self.relu(self.conv2(x)))
+      x = self.pool(self.relu(self.conv3(x)))
+      x = self.flatten(x)#converts a 3D tensor to a 1D tensor
+      x = self.relu(self.fc1(x))#applies ReLu to remove negatives. Takes 4096 numbers and compresses them down to 256 features.
+      x = self.fc2(x)#2 output layers, Benign and Malignant
+      return x
 
   
 
-
-
- 
 
 
 #cnn_model = CancerCNN()
