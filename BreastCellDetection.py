@@ -8,7 +8,7 @@ from torch import nn
 
 img_path = "6_jpg.rf.b3dbdcd56ecce6980a163a59431dad5d.jpg"
 
-yolo_model = YOLO("runs/detect/train/weights/best.pt")
+yolo_model = YOLO("best.pt")
 results = yolo_model(img_path)
 annotated_frame = results[0].plot()
 cv2.imshow("YOLO", annotated_frame)
@@ -26,6 +26,8 @@ class CancerCNN(nn.Module):
       self.flatten = nn.Flatten()#converts 3D tensor to 1D tensor
       self.fc1 = nn.Linear(4096, 256)#64 of 8*8 pixels and 256 output layers
       self.fc2 = nn.Linear(256, 2)#2 output layers, Benign and Malignant
+
+      def forward(self, x):
 
   
 
