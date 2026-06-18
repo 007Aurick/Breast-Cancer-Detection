@@ -100,6 +100,13 @@ Grad-CAM makes the model explainable — critical in medical AI where trust and 
 
 ---
 
+### Grad-CAM Explainability
+**Benign Detection (86.35% confidence)**
+![Benign](CellDetection1.png)
+
+**Malignant Detection (95.31% confidence)**
+![Malignant](CellDetection2.png)
+
 ## Future Improvements
 
 - Improve CNN accuracy with deeper architectures (ResNet, EfficientNet)
